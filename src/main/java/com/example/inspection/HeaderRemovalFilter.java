@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-@Deprecated
+//@Deprecated
 public class HeaderRemovalFilter extends OncePerRequestFilter {
 
   private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(HeaderRemovalFilter.class);

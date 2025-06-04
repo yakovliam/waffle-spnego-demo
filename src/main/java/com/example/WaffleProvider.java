@@ -11,37 +11,30 @@ import waffle.windows.auth.impl.WindowsAuthProviderImpl;
 
 public class WaffleProvider {
 
+  private final SecurityFilterProviderCollection securityFilterProviderCollection =
+      getSecurityFilterProviderCollection();
+
   public NegotiateSecurityFilter getNegotiateSecurityFilter() {
-    NegotiateSecurityFilterProvider negotiateSecurityFilterProvider =
-        new NegotiateSecurityFilterProvider(new WindowsAuthProviderImpl());
-
-    List<SecurityFilterProvider> securityFilterProviders = new ArrayList<>();
-    securityFilterProviders.add(negotiateSecurityFilterProvider);
-
-    SecurityFilterProviderCollection securityFilterProviderCollection =
-        new SecurityFilterProviderCollection(
-            securityFilterProviders.toArray(new SecurityFilterProvider[0]));
-
     NegotiateSecurityFilter negotiateSecurityFilter = new NegotiateSecurityFilter();
     negotiateSecurityFilter.setProvider(securityFilterProviderCollection);
-
     return negotiateSecurityFilter;
   }
 
   public NegotiateSecurityFilterEntryPoint getNegotiateSecurityFilterEntryPoint() {
+    NegotiateSecurityFilterEntryPoint negotiateSecurityFilterEntryPoint =
+        new NegotiateSecurityFilterEntryPoint();
+    negotiateSecurityFilterEntryPoint.setProvider(securityFilterProviderCollection);
+    return negotiateSecurityFilterEntryPoint;
+  }
+
+  public SecurityFilterProviderCollection getSecurityFilterProviderCollection() {
     NegotiateSecurityFilterProvider negotiateSecurityFilterProvider =
         new NegotiateSecurityFilterProvider(new WindowsAuthProviderImpl());
 
     List<SecurityFilterProvider> securityFilterProviders = new ArrayList<>();
     securityFilterProviders.add(negotiateSecurityFilterProvider);
 
-    SecurityFilterProviderCollection securityFilterProviderCollection =
-        new SecurityFilterProviderCollection(
-            securityFilterProviders.toArray(new SecurityFilterProvider[0]));
-
-    NegotiateSecurityFilterEntryPoint negotiateSecurityFilterEntryPoint =
-        new NegotiateSecurityFilterEntryPoint();
-    negotiateSecurityFilterEntryPoint.setProvider(securityFilterProviderCollection);
-    return negotiateSecurityFilterEntryPoint;
+    return new SecurityFilterProviderCollection(
+        securityFilterProviders.toArray(new SecurityFilterProvider[0]));
   }
 }
